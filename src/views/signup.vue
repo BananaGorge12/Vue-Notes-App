@@ -4,8 +4,10 @@
         <form @submit.prevent="signup">
             <label for="email">Email:</label>
             <input v-model="email" class="form-item input" type="email" name="email" id="email-input">
-            <label for="email">Password:</label>
+            <label for="password">Password:</label>
             <input v-model="password" class="form-item input" type="password" name="password" id="password-input">
+            <label for="name">Name:</label>
+            <input v-model="name" class="form-item input" type="text" name="name">
             <p id="feedback" v-if="feedback">{{feedback}}</p>
             <input class="form-item" type="submit" id="submit" value="Signup">
         </form>
@@ -13,18 +15,24 @@
 </template>
 <script>
 import firebase from 'firebase'
+import db from '@/firebase/init'
 export default {
     name:'signup',
     data(){
         return{
             email:null,
             password:null,
-            feedback:null
+            feedback:null,
+            name:null
         }
     },
     methods:{
         signup(){
-           firebase.auth().createUserWithEmailAndPassword(this.email,this.password).then(() => {
+           firebase.auth().createUserWithEmailAndPassword(this.email,this.password).then(cred => {
+               db.collection('users').add({
+                   uid:cred.user.uid,
+                   name:this.name
+               })
                this.feedback = null
                this.$router.push({name:'Home'})
            }).catch(err => {

@@ -1,25 +1,26 @@
 <template>
-  <div id="full-note">
-    <form @submit.prevent="update" :style="`background:${color};`" class="form">
+  <div id="new-note">
+    <form class="form" @submit.prevent="addNote" :style="'background:'+newNoteColor+';'">
       <input
-        :style="`background:${color};`"
+        v-if="showFullInput"
+        :style="'background:'+newNoteColor+';'"
+        v-model="newNoteTitle"
         placeholder="Title"
-        v-model="title"
         class="note-input title-input"
         type="text"
       />
-      <div
-        contenteditable="true"
+      <textarea
+        @click="showFullInput = true"
+        :style="'background:'+newNoteColor+';'"
+        v-model="newNoteContext"
         placeholder="Take a note.."
-        id="content-edit"
+        id="content-input"
         class="note-input"
-        @keydown="updateContent"
-        :style="`background:${color};`"
-      />
-      <div class="options-div">
+      ></textarea>
+      <div v-if="showFullInput" :style="'background:'+newNoteColor+';'" class="options-div">
         <div class="options">
-          <div @click="deleteNote" class="icon">
-            <i class="fas fa-trash"></i>
+          <div class="icon">
+            <i class="far fa-bell"></i>
           </div>
           <div class="icon">
             <i class="fas fa-user-plus"></i>
@@ -67,7 +68,8 @@
             </i>
           </div>
           <div class="icon">
-            <i class="fas fa-file-image"></i>
+            <!-- <input @change="uploadPic" type="file"> -->
+            <i class="fas fa-image"></i>
           </div>
           <div class="icon">
             <i class="fas fa-archive"></i>
@@ -82,7 +84,7 @@
             <i class="fas fa-redo"></i>
           </div>
         </div>
-        <input style="float:right" class="submit" type="submit" value="Close" />
+        <input style="float:right" id="submit" type="submit" value="Close" />
       </div>
     </form>
   </div>
@@ -91,77 +93,103 @@
 import db from "@/firebase/init";
 import firebase from "firebase";
 export default {
-  name: "fullNote",
-  props: ["data"],
+  name: "newNote",
   data() {
     return {
-      title: this.data.title,
-      content: this.data.content,
-      color: this.data.color,
+      newNoteTitle: null,
+      newNoteContext: null,
+      newNoteColor: "#ffffff",
+      showFullInput: false,
     };
   },
   methods: {
-    update() {
-      this.content = document.getElementById("content-edit").innerText;
-      db.collection("notes")
-        .doc(this.data.id)
-        .update({
-          title: this.title,
-          content: this.content,
-          color: this.color,
-          owner: firebase.auth().currentUser.uid,
-          big:false
-        })
-        .then(() => {
-         this.$emit('close')
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    updateContent() {
-      this.content = document.getElementById("content-edit").innerText;
+    addNote() {
+      if (this.newNoteTitle) {
+        db.collection("notes")
+          .add({
+            title: this.newNoteTitle,
+            content: this.newNoteContext,
+            color: this.newNoteColor,
+            owner: firebase.auth().currentUser.uid,
+          })
+          .then(() => {
+            this.newNoteTitle = null;
+            this.newNoteContext = null;
+            this.newNoteColor = "#ffffff";
+            //location.reload();
+          });
+      }
     },
     changeColor(color) {
-      this.color = color;
-    },
-    deleteNote() {
-      db.collection("notes")
-        .doc(this.data.id)
-        .delete()
-        .then(() => {
-          this.$emit('close')
-        });
+      this.newNoteColor = color;
     },
     markCheck(color) {
-      return color == this.color;
+      return color == this.newNoteColor;
     },
-  },
-  mounted() {
-    document.getElementById("content-edit").innerText = this.content;
   },
 };
 </script>
 <style scoped>
-/* note edit */
-#full-note {
-  z-index: 1000;
+.form {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid;
 }
-input {
+/* title input */
+.title-input {
+  height: 44px;
+}
+/* texteara */
+#content-input {
+  height: 46px;
+  resize: none;
+}
+#content-input::-webkit-input-placeholder {
+  line-height: 46px;
+  vertical-align: middle;
+}
+#content-input::-moz-placeholder {
+  line-height: 46px;
+  vertical-align: middle;
+}
+#content-input:-ms-input-placeholder {
+  line-height: 46px;
+  vertical-align: middle;
+}
+/* both inputs */
+.note-input {
+  width: 598px;
   border: none;
   outline: none;
-}
-.title-input {
-  outline: none;
-  height: 50px;
-  width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  padding-left: 20px;
+}
+.options-div {
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+}
+.options-div input {
+  margin-left: 70px;
+  width: 86px;
+  height: 36px;
+  background: none;
+  border: none;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+.options-div input:hover {
+  background: #f1f3f4;
+}
+.options {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 .icon {
-  height: 48px;
-  width: 48px;
+  padding: 10px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -171,73 +199,9 @@ input {
 .icon:hover {
   background: #f1f3f4;
 }
-#full-note #cover {
-  opacity: 0.8;
-  position: fixed;
-  background: gray;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  left: 0px;
-  top: 0;
-}
-#full-note form {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  width: 600px;
-  max-height: 850px;
-  overflow: hidden;
-  border-radius: 10px;
-  opacity: 1;
-  z-index: 2;
-}
-#content-edit {
-  min-height: 90px;
-  max-height: 700px;
-  padding: 20px;
-  overflow-x: none;
-  overflow-y: scroll;
+#submit{
   outline: none;
-  font-family: Arial, Helvetica, sans-serif;
 }
-.submit {
-  margin-left: 70px;
-  width: 86px;
-  height: 36px;
-  background: none;
-  border: none;
-  font-family: Arial, Helvetica, sans-serif;
-  cursor: pointer;
-}
-#submit:hover {
-  background: #f1f3f4;
-}
-.options-div {
-  display: flex;
-  align-items: center;
-}
-.options {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-}
-/* scroll bar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
 /* tooltip */
 /* Tooltip container */
 .tooltip {
@@ -271,7 +235,7 @@ input {
   visibility: visible;
 }
 
-.color {
+.color{
   height: 26px;
   width: 26px;
   border-radius: 50%;
@@ -280,42 +244,42 @@ input {
   align-items: center;
   justify-content: center;
 }
-#white {
+#white{
   background: #ffffff;
   border: solid 1px #5f6368;
   margin: 1px;
 }
-#red {
-  background: #f28b82;
+#red{
+  background:#F28B82 ;
 }
-#orange {
-  background: #fbbc04;
+#orange{
+  background: #FBBC04;
 }
-#yellow {
-  background: #fff475;
+#yellow{
+  background: #FFF475;
 }
-#green {
-  background: #ccff90;
+#green{
+  background: #CCFF90;
 }
-#teal {
-  background: #a7ffeb;
+#teal{
+  background: #A7FFEB;
 }
-#blue {
-  background: #cbf0f8;
+#blue{
+  background: #CBF0F8;
 }
-#dark-blue {
-  background: #aecbfa;
+#dark-blue{
+  background: #AECBFA;
 }
-#purple {
-  background: #d7aefb;
+#purple{
+  background: #D7AEFB;
 }
-#pink {
-  background: #fdcfe8;
+#pink{
+  background: #FDCFE8;
 }
-#brown {
-  background: #e6c9a8;
+#brown{
+  background: #E6C9A8;
 }
-#grey {
-  background: #ebecee;
+#grey{
+  background: #EBECEE;
 }
 </style>

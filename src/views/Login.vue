@@ -31,6 +31,9 @@ export default {
                this.feedback = err.message
            })
         }
+    },
+    created(){
+        
     }
 
 }
