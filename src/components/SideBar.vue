@@ -62,8 +62,11 @@ export default {
         background:#feefc3;
     }
     .router-link-exact-active:hover{
-        background-color:none;
+        background-color:#feefc3;
+    }
+    .router-link-active:hover{
         text-decoration: none;
+        background-color: none;
     }
     .sidebar-slide-open{
         animation: open 0.3s both linear;
