@@ -8,10 +8,10 @@
             <i class="fas fa-bell fa-lg"></i>
             <h3>Reminders</h3>
         </div>
-        <div class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
+        <router-link :to="{name:'Archive'}" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-archive fa-lg"></i>
             <h3>Archive</h3>
-        </div>
+        </router-link>
         <router-link :to="{name:'Bin'}" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-trash fa-lg"></i>
             <h3>Bin</h3>

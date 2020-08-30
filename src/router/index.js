@@ -7,6 +7,7 @@ import Home from '../views/Home.vue'
 import Signup from '@/views/signup'
 import Login from '@/views/Login'
 import Bin from '@/views/bin'
+import Archive from '@/views/Archive'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ Vue.use(VueRouter)
     path:'/bin',
     name:'Bin',
     component:Bin
+  },
+  {
+    path:'/archive',
+    name:'Archive',
+    component:Archive
   }
 ]
 

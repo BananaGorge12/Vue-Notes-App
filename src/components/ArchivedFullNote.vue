@@ -69,7 +69,7 @@
           <div class="icon">
             <i class="fas fa-file-image"></i>
           </div>
-          <div class="icon" @click="archiveNote">
+          <div class="icon" @click="unArchiveNote">
             <i class="fas fa-archive"></i>
           </div>
           <div class="icon">
@@ -92,7 +92,7 @@ import db from "@/firebase/init";
 import firebase from "firebase";
 import moment from "moment";
 export default {
-  name: "fullNote",
+  name: "achivedfullNote",
   props: ["data"],
   data() {
     return {
@@ -132,16 +132,17 @@ export default {
         .update({
           deletionDate: moment(Date.now()).add("7", "days").valueOf(),
           bin: true,
+          archived:false
         })
         .then(() => {
-          this.$emit("close");
+          this.$emit("close",this.data.id);
         });
     },
-    archiveNote() {
+    unArchiveNote() {
       db.collection("notes")
         .doc(this.data.id)
         .update({
-          archived:true
+          archived:false
         })
         .then(() => {
           this.$emit("close");

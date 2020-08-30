@@ -2,12 +2,12 @@
   <div class="home">
     <div class="container">
       <newNote />
-      <p id="uploadStatus" v-if="uploadStatus">{{uploadStatus}}</p>
+      <!-- <p id="uploadStatus" v-if="uploadStatus">{{uploadStatus}}</p> -->
       <div class="notes">
         <fullNote @close="showFullNote = false" :data="currentNoteData"  v-if="showFullNote" />
         <div v-if="showFullNote" @click="showFullNote = false" id="cover"/>
         <div class="noteCover" v-for="note in notes" :key="note.id">
-          <div v-if="!note.bin" @click="currentNoteDataUpdater(note)" class="note" :style="'background:'+note.color+';'">
+          <div v-if="!note.bin && !note.archived" @click="currentNoteDataUpdater(note)" class="note" :style="'background:'+note.color+';'">
             <h2>{{note.title}}</h2>
             <h3>{{note.content}}</h3>
           </div>
