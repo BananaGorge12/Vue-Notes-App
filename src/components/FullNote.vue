@@ -189,7 +189,6 @@ input {
   transform: translate(-50%, -50%);
   background: white;
   width: 600px;
-  max-height: 850px;
   overflow: hidden;
   border-radius: 10px;
   opacity: 1;
@@ -197,7 +196,7 @@ input {
 }
 #content-edit {
   min-height: 90px;
-  max-height: 700px;
+  max-height: 75vh;
   padding: 20px;
   overflow-x: none;
   overflow-y: scroll;

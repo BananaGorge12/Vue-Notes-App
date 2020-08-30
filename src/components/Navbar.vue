@@ -180,7 +180,7 @@ export default {
   }
   /* resposive */
     @media screen and (max-width: 800px){
-      input{
+      .navbar input{
         display: none;
       }
       .search-bar-item{
