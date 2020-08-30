@@ -3,13 +3,18 @@
     <div class="container">
         <h2>Notes in the Recycle Bin are deleted after 7 days.</h2>
         <h3 id="deleteAllNotes" @click="deleteAllNotes">Delete all notes</h3>
-        <div class="noteCover" v-for="note in notes" :key="note.id">
-          <div @mouseover="note.hover = true" @mouseleave="note.hover = false" class="note" :style="'background:'+note.color+';'">
-            <i v-if="note.hover" @click="deleteNote(note.id)" class="fas fa-trash fa-lg"></i>
-            <h2>{{note.title}}</h2>
-            <h3>{{note.content}}</h3>
+        <div class="notes">
+          <div class="noteCover" v-for="note in notes" :key="note.id">
+            <div @mouseover="note.hover = true" @mouseleave="note.hover = false" class="note" :style="'background:'+note.color+';'">
+              <div class="icon-container">
+                  <i v-if="note.hover" @click="deleteNote(note.id)" class="fas fa-trash fa-lg"></i>
+                  <i v-if="note.hover" @click="restore(note.id)" class="fas fa-trash-restore fa-lg"></i>
+              </div>
+              <h2>{{note.title}}</h2>
+              <h3>{{note.content}}</h3>
+            </div>
           </div>
-        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -50,8 +55,14 @@ export default {
                     this.notes.push(newNote)
                 }
             }
+            //on removed
             else if(change.type == 'removed'){
               this.notes = this.notes.filter(item => {
+                return item.id != change.doc.id
+              })
+            }
+            else if(change.type == 'modified'){
+                this.notes = this.notes.filter(item => {
                 return item.id != change.doc.id
               })
             }
@@ -75,13 +86,22 @@ export default {
                 db.collection('notes').doc(note.id).delete()
             })
         })
+    },
+    restore(id){
+      db.collection('notes').doc(id).update({
+        bin:false
+      })
     }
   }
 };
 </script>
 <style scoped>
     i{
-        margin-top: 10px;
+        margin: 10px;
+        cursor: pointer;
+    }
+    .noteCover{
+      height: fit-content;
     }
     #deleteAllNotes{
         font-weight: 500;
@@ -90,5 +110,8 @@ export default {
     }
     #deleteAllNotes:hover{
         text-decoration: underline;
+    }
+    .icon-container{
+      display: flex;
     }
 </style>

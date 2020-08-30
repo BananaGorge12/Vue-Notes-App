@@ -3,7 +3,7 @@
     <div class="container">
       <newNote />
       <p id="uploadStatus" v-if="uploadStatus">{{uploadStatus}}</p>
-      <div id="notes">
+      <div class="notes">
         <fullNote @close="showFullNote = false" :data="currentNoteData"  v-if="showFullNote" />
         <div v-if="showFullNote" @click="showFullNote = false" id="cover"/>
         <div class="noteCover" v-for="note in notes" :key="note.id">
@@ -111,12 +111,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-/* note container */
-.home #notes {
-  width: 70%;
-  display: flex;
-  flex-wrap: wrap;
 }
 h3 {
   font-family: Arial, Helvetica, sans-serif;
