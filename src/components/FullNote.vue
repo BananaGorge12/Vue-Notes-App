@@ -18,7 +18,7 @@
       />
       <div class="options-div">
         <div class="options">
-          <div @click="deleteNote" class="icon">
+          <div @click="binNote" class="icon">
             <i class="fas fa-trash"></i>
           </div>
           <div class="icon">
@@ -90,6 +90,7 @@
 <script>
 import db from "@/firebase/init";
 import firebase from "firebase";
+import moment from 'moment'
 export default {
   name: "fullNote",
   props: ["data"],
@@ -125,13 +126,13 @@ export default {
     changeColor(color) {
       this.color = color;
     },
-    deleteNote() {
-      db.collection("notes")
-        .doc(this.data.id)
-        .delete()
-        .then(() => {
-          this.$emit('close')
-        });
+    binNote() {
+      db.collection('notes').doc(this.data.id).update({
+        deletionDate:moment(Date.now()).add('7','days').valueOf(),
+        bin:true
+      }).then(() => {
+        this.$emit('close')
+      })
     },
     markCheck(color) {
       return color == this.color;

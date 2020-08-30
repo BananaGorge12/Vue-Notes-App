@@ -7,7 +7,7 @@
         <fullNote @close="showFullNote = false" :data="currentNoteData"  v-if="showFullNote" />
         <div v-if="showFullNote" @click="showFullNote = false" id="cover"/>
         <div class="noteCover" v-for="note in notes" :key="note.id">
-          <div @click="currentNoteDataUpdater(note)" class="note" :style="'background:'+note.color+';'">
+          <div v-if="!note.bin" @click="currentNoteDataUpdater(note)" class="note" :style="'background:'+note.color+';'">
             <h2>{{note.title}}</h2>
             <h3>{{note.content}}</h3>
           </div>

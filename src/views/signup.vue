@@ -1,16 +1,18 @@
 <template>
     <div id="signup">
-        <h1>Sign up</h1>
-        <form @submit.prevent="signup">
-            <label for="email">Email:</label>
-            <input v-model="email" class="form-item input" type="email" name="email" id="email-input">
-            <label for="password">Password:</label>
-            <input v-model="password" class="form-item input" type="password" name="password" id="password-input">
-            <label for="name">Name:</label>
-            <input v-model="name" class="form-item input" type="text" name="name">
-            <p id="feedback" v-if="feedback">{{feedback}}</p>
-            <input class="form-item" type="submit" id="submit" value="Signup">
-        </form>
+        <div class="container">
+            <h1>Sign up</h1>
+            <form @submit.prevent="signup">
+                <label for="email">Email:</label>
+                <input v-model="email" class="form-item input" type="email" name="email" id="email-input">
+                <label for="password">Password:</label>
+                <input v-model="password" class="form-item input" type="password" name="password" id="password-input">
+                <label for="name">Name:</label>
+                <input v-model="name" class="form-item input" type="text" name="name">
+                <p id="feedback" v-if="feedback">{{feedback}}</p>
+                <input class="form-item" type="submit" id="submit" value="Signup">
+            </form>
+        </div>
     </div>
 </template>
 <script>
@@ -47,6 +49,9 @@ export default {
     #signup{
         width: 100%;
         height: 100%;
+        margin-top: 60px;
+    }
+    .container{
         display: flex;
         flex-direction: column;
         align-items: center;

@@ -2,8 +2,8 @@
   <div class="navbar">
     <nav>
       <div class="nav-sec">
-        <div class="icon-back">
-          <i class="fas fa-bars fa-lg nav-item" @click="this.$emit('sidebar')"></i>
+        <div class="icon-back" @click="toggleSideBar">
+          <i class="fas fa-bars fa-lg nav-item"></i>
         </div>
         <img class="nav-item" src="@/assets/images/keep-logo-small.png">
         <router-link :to="{name:'Home'}">Keep</router-link>
@@ -19,7 +19,7 @@
         <router-link class="log-links" v-if="!user" :to="{name:'Signup'}" id="signup">Signup</router-link>
       </div>
     </nav>
-    <sidebar :button="showSidebar"/>
+    <sidebar :showSidebar="showSidebar"/>
   </div>
 </template>
 
@@ -44,6 +44,9 @@ export default {
       firebase.auth().signOut().then(() => {
         this.$router.push({name:'Signup'})
       })
+    },
+    toggleSideBar(){
+      this.showSidebar = !this.showSidebar
     }
   },
   created(){

@@ -1,14 +1,16 @@
 <template>
     <div id="Login">
-        <h1>Login</h1>
-        <form @submit.prevent="Login">
-            <label for="email">Email:</label>
-            <input v-model="email" class="form-item input" type="email" name="email" id="email-input">
-            <label for="email">Password:</label>
-            <input v-model="password" class="form-item input" type="password" name="password" id="password-input">
-            <p id="feedback" v-if="feedback">{{feedback}}</p>
-            <input class="form-item" type="submit" id="submit" value="Login">
-        </form>
+        <div class="container">
+            <h1>Login</h1>
+            <form @submit.prevent="Login">
+                <label for="email">Email:</label>
+                <input v-model="email" class="form-item input" type="email" name="email" id="email-input">
+                <label for="email">Password:</label>
+                <input v-model="password" class="form-item input" type="password" name="password" id="password-input">
+                <p id="feedback" v-if="feedback">{{feedback}}</p>
+                <input class="form-item" type="submit" id="submit" value="Login">
+            </form>
+        </div>
     </div>
 </template>
 <script>
@@ -41,7 +43,10 @@ export default {
 <style scoped>
     #Login{
         width: 100%;
-        height: 100%;
+        height: 100%;;
+        margin-top: 60px;
+    }
+    .container{
         display: flex;
         flex-direction: column;
         align-items: center;

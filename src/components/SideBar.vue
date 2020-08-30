@@ -1,34 +1,29 @@
 <template>
-    <div class="sidebar" @sidebar="sidebar">
-        <div :class="`sidebar-item ${animation}`">
+    <div class="sidebar">
+        <router-link :to="{name:'Home'}" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-lightbulb fa-lg"></i>
             <h3>Notes</h3>
-        </div>
-        <div :class="`sidebar-item ${animation}`">
+        </router-link>
+        <div class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-bell fa-lg"></i>
             <h3>Reminders</h3>
         </div>
-        <div :class="`sidebar-item ${animation}`">
-            <i class="fas fa-edit fa-lg"></i>
-            <h3>Edit labels</h3>
-        </div>
-        <div :class="`sidebar-item ${animation}`">
+        <div class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-archive fa-lg"></i>
             <h3>Archive</h3>
         </div>
-        <div :class="`sidebar-item ${animation}`">
+        <router-link :to="{name:'Bin'}" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-trash fa-lg"></i>
             <h3>Bin</h3>
-        </div>
+        </router-link>
     </div>
 </template>
 <script>
 export default {
     name:'sidebar',
-    props:['button'],
+    props:['showSidebar'],
     data(){
         return{
-            clicked:this.button,
             animation:null
         }
     },
@@ -39,15 +34,15 @@ export default {
         }
     },
     methods:{
-        sidebar(){
-            alert()
+        sidebarAction(){
+            alert('works')
         }
     }
 }
 </script>
 <style scoped>
     .sidebar{
-        width: 300px;
+        width: fit-content;
         margin: 0;
         float: left;
         display: flex;
@@ -63,8 +58,18 @@ export default {
         border-radius:50% ;
         width: 35px;
     }
+    .router-link-exact-active{
+        background:#feefc3;
+    }
+    .router-link-exact-active:hover{
+        background-color:none;
+        text-decoration: none;
+    }
     .sidebar-slide-open{
-        animation: open 1s both linear;
+        animation: open 0.3s both linear;
+    }
+    .sidebar-slide-close{
+        animation: close 0.3s both linear;
     }
     .sidebar-item:hover{
         background: #d6d6d6;
@@ -75,15 +80,28 @@ export default {
     /* animation */
     @keyframes open{
         0%{
-            width: 40px;
+            width: 35px;
             border-radius: 50%;
         }
-        1%{
+        100%{
+            width: 200px;
             border-top-right-radius: 25px;
             border-bottom-right-radius: 25px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+    }
+    @keyframes close{
+        0%{
+            width: 200px;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
         }
         100%{
-            width: 400px;
+            width: 35px;
+            border-radius: 50%;
         }
     }
 </style>
