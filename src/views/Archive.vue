@@ -3,7 +3,7 @@
     <h2>Archived Notes</h2>
     <div v-if="showFullNote" @click="showFullNote = false" id="cover"/>
     <div class="notes">
-      <AchivedFullNote @close="filterNotes" :data="currentNoteData" v-if="showFullNote" />
+      <FullNote @close="filterNotes" :data="currentNoteData" v-if="showFullNote" />
       <div v-if="showFullNote" @click="showFullNote = false" id="cover" />
       <div class="noteCover" v-for="note in notes" :key="note.id">
         <div
@@ -22,7 +22,7 @@
 <script>
 import firebase from "firebase";
 import db from "@/firebase/init";
-import AchivedFullNote from '@/components/ArchivedFullNote'
+import FullNote from '@/components/FullNote'
 export default {
   name: "archive",
   data() {
@@ -33,7 +33,7 @@ export default {
     };
   },
   components:{
-      AchivedFullNote
+      FullNote
   },
   created() {
     //logins user
@@ -59,8 +59,7 @@ export default {
                 newNote.hover = false;
                 this.notes.push(newNote);
             }
-            else if (change.type == "modified") {
-            console.log('test')
+            else if (change.type == "removed") {
               this.notes = this.notes.filter((item) => {
                 return item.id != change.doc.id;
               });
@@ -76,15 +75,15 @@ export default {
         title:note.title,
         content:note.content,
         color:note.color,
-        id:note.id
+        id:note.id,
+        archived:note.archived
       }
       this.showFullNote = true
     },
     filterNotes(){
-        let test = $close
-        this.notes = this.notes.filter(note => {
-            return note.id != test
-        })
+        // this.notes = this.notes.filter(note => {
+        //     return note.id != test
+        // })
         this.showFullNote = false
     }
   }

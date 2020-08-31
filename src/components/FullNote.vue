@@ -138,14 +138,11 @@ export default {
         });
     },
     archiveNote() {
-      db.collection("notes")
-        .doc(this.data.id)
-        .update({
-          archived:true
-        })
-        .then(() => {
-          this.$emit("close");
-        });
+      db.collection("notes").doc(this.data.id).update({
+        archived:!this.data.archived
+      }).then(() => {
+        this.$emit('close')
+      })
     },
     markCheck(color) {
       return color == this.color;
@@ -215,6 +212,7 @@ input {
   overflow-y: scroll;
   outline: none;
   font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
 }
 .submit {
   margin-left: 70px;
