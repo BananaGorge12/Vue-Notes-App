@@ -8,6 +8,10 @@
             <i class="fas fa-bell fa-lg"></i>
             <h3>Reminders</h3>
         </div>
+        <div @click="showLabels = true" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
+            <i class="fas fa-pen fa-lg"></i>
+            <h3>Edit Label</h3>
+        </div>
         <router-link :to="{name:'Archive'}" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-archive fa-lg"></i>
             <h3>Archive</h3>
@@ -16,26 +20,26 @@
             <i class="fas fa-trash fa-lg"></i>
             <h3>Bin</h3>
         </router-link>
+        <labels  @close="closeLabelWindow" v-if="showLabels"/>
     </div>
 </template>
 <script>
+import labels from './Labels'
 export default {
     name:'sidebar',
     props:['showSidebar'],
+    components:{
+        labels
+    },
     data(){
         return{
-            animation:null
-        }
-    },
-    created(){
-        console.log(this.clicked)
-        if(this.clicked){
-            this.animation = 'sidebar-slide-open'
+            animation:null,
+            showLabels:false
         }
     },
     methods:{
-        sidebarAction(){
-            alert('works')
+        closeLabelWindow(){
+            this.showLabels = false
         }
     }
 }
@@ -57,6 +61,7 @@ export default {
         overflow: hidden;
         border-radius:50% ;
         width: 35px;
+        height: 60px;
     }
     .router-link-exact-active{
         background:#feefc3;

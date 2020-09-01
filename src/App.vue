@@ -69,6 +69,12 @@ a h3 {
   flex-direction: column;
   align-items: center;
 }
+.divider{
+  width: 100%;
+  height: 1px;
+  border-bottom: solid 1px;
+  margin: 50px auto;
+}
 /* note container */
 .notes {
   width: 70%;

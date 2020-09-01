@@ -59,7 +59,15 @@ export default {
                 newNote.hover = false;
                 this.notes.push(newNote);
             }
-            else if (change.type == "removed") {
+            else if(change.type == 'modified'){
+              let unEditedNote = this.notes.filter(item => {
+                return item.id == change.doc.id
+              })
+              let updatedNote = note
+              updatedNote.id = unEditedNote[0].id
+              updatedNote.index = unEditedNote[0].index
+              this.notes[unEditedNote[0].index] = updatedNote
+            }else if (change.type == "removed") {
               this.notes = this.notes.filter((item) => {
                 return item.id != change.doc.id;
               });
