@@ -33,7 +33,8 @@ export default {
            firebase.auth().createUserWithEmailAndPassword(this.email,this.password).then(cred => {
                db.collection('users').add({
                    uid:cred.user.uid,
-                   name:this.name
+                   name:this.name,
+                   labels:[]
                })
                this.feedback = null
                this.$router.push({name:'Home'})

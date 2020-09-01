@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar">
+    <div class="sidebar" v-if="loggedIn">
         <router-link :to="{name:'Home'}" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-lightbulb fa-lg"></i>
             <h3>Notes</h3>
@@ -7,6 +7,10 @@
         <div class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-bell fa-lg"></i>
             <h3>Reminders</h3>
+        </div>
+        <div v-for="(label,index) in labels" :key="index" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
+            <i class="fas fa-tag fa-lg"></i>
+            <h3>{{label}}</h3>
         </div>
         <div @click="showLabels = true" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-pen fa-lg"></i>
@@ -24,6 +28,8 @@
     </div>
 </template>
 <script>
+import firebase from 'firebase'
+import db from '@/firebase/init'
 import labels from './Labels'
 export default {
     name:'sidebar',
@@ -34,13 +40,28 @@ export default {
     data(){
         return{
             animation:null,
-            showLabels:false
+            showLabels:false,
+            labels:[],
+            userUid:null,
+            loggedIn:false
         }
     },
     methods:{
         closeLabelWindow(){
             this.showLabels = false
         }
+    },
+    created(){
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                this.loggedIn = true
+                db.collection('users').where('uid','==',firebase.auth().currentUser.uid).onSnapshot(snap => {
+                    snap.forEach(doc => {
+                        this.labels = doc.data().labels
+                    });
+                })
+            }
+        })
     }
 }
 </script>
