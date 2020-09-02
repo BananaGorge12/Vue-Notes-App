@@ -8,10 +8,10 @@
             <i class="fas fa-bell fa-lg"></i>
             <h3>Reminders</h3>
         </div>
-        <div v-for="(label,index) in labels" :key="index" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
+        <router-link :to="{name:'/label/',params:{name:test}}" v-for="(label,index) in labels" :key="index" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-tag fa-lg"></i>
             <h3>{{label}}</h3>
-        </div>
+        </router-link>
         <div @click="showLabels = true" class="sidebar-item" :class="{'sidebar-slide-open' : showSidebar,'sidebar-slide-close' : !showSidebar }">
             <i class="fas fa-pen fa-lg"></i>
             <h3>Edit Label</h3>
@@ -49,7 +49,36 @@ export default {
     methods:{
         closeLabelWindow(){
             this.showLabels = false
+        },
+        slug(str){
+        let label = str.toLowerCase()
+        let output =''
+        for(let index = 0;index < label.length;index++){
+            if(label[index] != '!' && 
+            label[index] != '@' && 
+            label[index] != '#' && 
+            label[index] != '$' && 
+            label[index] != '%' && 
+            label[index] != '^' && 
+            label[index] != '&' && 
+            label[index] != '*' && 
+            label[index] != '(' &&
+            label[index] != ')' &&
+            label[index] != ' ' &&
+            label[index] != '/' &&
+            label[index] != '|' &&
+            label[index] != '[' &&
+            label[index] != ']' &&
+            label[index] != '{' &&
+            label[index] != '}' &&
+            label[index] != '$' &&
+            label[index] != '"' &&
+            label[index] != '/'){
+                output += label.slice(index,index+1)
+            }
         }
+        return output
+    }
     },
     created(){
         firebase.auth().onAuthStateChanged(user => {
