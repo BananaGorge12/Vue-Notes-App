@@ -72,7 +72,13 @@
           <div class="icon" @click="archiveNote">
             <i class="fas fa-archive"></i>
           </div>
-          <div class="icon">
+          <div class="icon" @mouseover="showLabels = true" @mouseleave="showLabels = false">
+            <div v-if="showLabels" class="labels">
+              <div class="label" v-for="(label,index) in labels" :key="index">
+                <p class="label-name" v-if="!isLabelSelected(label)" @click="addLabel(label)">{{label}}</p>
+                <p class="label-name" style="color:#0090ea; font-weight:600;" v-else @click="removeLabel(label)">{{label}}</p>
+              </div>
+            </div>
             <i class="fas fa-ellipsis-v"></i>
           </div>
           <div class="icon">
@@ -99,6 +105,9 @@ export default {
       title: this.data.title,
       content: this.data.content,
       color: this.data.color,
+      selectedLabels:this.data.labels,
+      showLabels:false,
+      labels:[],
     };
   },
   methods: {
@@ -147,6 +156,44 @@ export default {
     markCheck(color) {
       return color == this.color;
     },
+    addLabel(label){
+      if(this.selectedLabels){
+        this.selectedLabels.push(label)
+        db.collection("notes").doc(this.data.id).update({
+          labels:this.selectedLabels
+        })
+      }
+      else{
+        this.selectedLabels = []
+        this.addLabel(label)
+      }
+    },
+    removeLabel(label){
+      this.selectedLabels = this.selectedLabels.filter(item => {
+        return item != label
+      })
+      db.collection("notes").doc(this.data.id).update({
+        labels:this.selectedLabels
+      }).then(() => {this.$emit('close')})
+    },
+    isLabelSelected(label){
+        let testedLabel = this.selectedLabels.filter(item => {
+          return label == item
+        })
+        if(testedLabel.length <= 0){
+          return false
+        }
+        else{
+          return true
+        }
+    }
+  },
+  created(){
+    db.collection('users').where('uid','==',firebase.auth().currentUser.uid).get().then(snap => {
+      snap.forEach(doc => {
+        this.labels = doc.data().labels
+      })
+    })
   },
   mounted() {
     document.getElementById("content-edit").innerText = this.content;
@@ -234,6 +281,26 @@ input {
   width: 100%;
   display: flex;
   justify-content: space-around;
+}
+.labels{
+  position: absolute;
+  background: #fff;
+  box-shadow: 1px 1px 12px #888888;
+  border-radius: 10px;
+  width: 150px;
+  text-align: center;
+  min-height: 100px;
+  height: fit-content;
+  bottom: 44px;
+  cursor: auto ;
+}
+.label-name{
+  font-family: sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+}
+.label-name:hover{
+  text-decoration: underline;
 }
 /* scroll bar */
 ::-webkit-scrollbar {

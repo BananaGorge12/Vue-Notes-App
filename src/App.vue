@@ -81,4 +81,14 @@ a h3 {
   display: flex;
   flex-wrap: wrap;
 }
+#cover {
+  opacity: 0.8;
+  position: fixed;
+  background: gray;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  left: 0px;
+  top: 0;
+}
 </style>

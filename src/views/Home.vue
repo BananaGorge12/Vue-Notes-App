@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       notes: [],
-      uploadStatus: null,
+      //uploadStatus: null,
       showFullNote:false,
       currentNoteData:null
     };
@@ -77,29 +77,30 @@ export default {
     });
   },
   methods: {
-    uploadPic(e) {
-      this.uploadStatus = "Uploading...";
-      //get file
-      var file = e.target.files[0];
-      //get ref
-      var storage = firebase.storage();
-      var storageRef = firebase.storage().ref("photos/" + file.name);
-      //upload
-      storageRef.put(file).then(() => {
-        this.uploadStatus = "Uploaded!";
-        setTimeout(function () {
-          this.uploadStatus = null;
-        }, 5000);
-        var gsReference = storage.refFromURL("gs://bucket/photos/" + file.name);
-        console.log(gsReference.getDownloadURL());
-      });
-    },
+    // uploadPic(e) {
+    //   this.uploadStatus = "Uploading...";
+    //   //get file
+    //   var file = e.target.files[0];
+    //   //get ref
+    //   var storage = firebase.storage();
+    //   var storageRef = firebase.storage().ref("photos/" + file.name);
+    //   //upload
+    //   storageRef.put(file).then(() => {
+    //     this.uploadStatus = "Uploaded!";
+    //     setTimeout(function () {
+    //       this.uploadStatus = null;
+    //     }, 5000);
+    //     var gsReference = storage.refFromURL("gs://bucket/photos/" + file.name);
+    //     console.log(gsReference.getDownloadURL());
+    //   });
+    // },
     currentNoteDataUpdater(note){
       this.currentNoteData = {
         title:note.title,
         content:note.content,
         color:note.color,
-        id:note.id
+        id:note.id,
+        labels:note.labels
       }
       this.showFullNote = true
     }
@@ -142,16 +143,6 @@ h3 {
 }
 .noteCover{
   height: fit-content;
-}
-.home #cover {
-  opacity: 0.8;
-  position: fixed;
-  background: gray;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  left: 0px;
-  top: 0;
 }
 uploadStatus {
   color: grey;
