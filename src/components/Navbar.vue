@@ -5,8 +5,7 @@
         <div class="icon-back" @click="toggleSideBar">
           <i class="fas fa-bars fa-lg nav-item"></i>
         </div>
-        <img class="nav-item" src="@/assets/images/keep-logo-small.png">
-        <router-link :to="{name:'Home'}">Keep</router-link>
+        <router-link :to="{name:'Home'}">Notes</router-link>
         <div class="nav-item search-bar">
           <i class="fas fa-search search-bar-item"></i>
           <input type="text" placeholder="Search" class="search-bar-item">
